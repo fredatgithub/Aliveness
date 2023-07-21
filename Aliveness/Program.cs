@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading;
 
-namespace Aliveness
+namespace TestAliveness
 {
   internal class Program
   {
@@ -10,24 +10,24 @@ namespace Aliveness
     {
       Action<string> Display = Console.WriteLine;
       Display("testing aliveness of the VM");
+      var timeToSleep = 1000;
       while (true)
       {
-        Thread.Sleep(60000);
-        WriteToFile();
-        Display($"{Environment.MachineName} is alive at {DateTime.Now}");
+        Thread.Sleep(timeToSleep);
+        var oneLine = $"{DateTime.Now.ToShortDateString()},{Environment.MachineName},{DateTime.Now.ToLongTimeString()}";
+        WriteToFile(oneLine, true, "alive.txt");
+        Display(oneLine);
+        WriteToFile(oneLine, false, "lastEntry.txt");
       }
-
-      Display("Press any key to exit:");
-      Console.ReadKey();
     }
 
-    private static void WriteToFile()
+    private static void WriteToFile(string message, bool append, string filename)
     {
       try
       {
-        using (StreamWriter sw = new StreamWriter("alive.txt", true))
+        using (StreamWriter sw = new StreamWriter(filename, append))
         {
-          sw.WriteLine($"{Environment.MachineName} is alive at {DateTime.Now}");
+          sw.WriteLine(message);
         }
       }
       catch (Exception)
