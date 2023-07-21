@@ -10,7 +10,7 @@ namespace TestAliveness
     {
       Action<string> Display = Console.WriteLine;
       Display("testing aliveness of the VM");
-      var timeToSleep = 1000;
+      var timeToSleep = 60000;
       while (true)
       {
         Thread.Sleep(timeToSleep);
