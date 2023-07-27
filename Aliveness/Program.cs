@@ -10,29 +10,65 @@ namespace Aliveness
     {
       Action<string> Display = Console.WriteLine;
       Display("testing aliveness of the VM");
-      while (true)
+      var timeToSleep = 60000; // test 1000 and prod 60000
+      var fileHistory = "alive.txt";
+      var fileLastEntry = "lastEntry.txt";
+      if (!File.Exists(fileHistory))
       {
-        Thread.Sleep(60000);
-        WriteToFile();
-        Display($"{Environment.MachineName} is alive at {DateTime.Now}");
+        File.Create(fileHistory);
       }
 
-      Display("Press any key to exit:");
-      Console.ReadKey();
+      if (!File.Exists(fileLastEntry))
+      {
+        File.Create(fileLastEntry);
+      }
+
+      string lastEntry = ReadFile(fileLastEntry);
+      WriteToFile(lastEntry, true, fileHistory);
+
+      while (true)
+      {
+        Thread.Sleep(timeToSleep);
+        var oneLine = $"{DateTime.Now.ToShortDateString()},{Environment.MachineName},{DateTime.Now.ToLongTimeString()}";
+        Display(oneLine);
+        WriteToFile(oneLine, false, "lastEntry.txt");
+      }
     }
 
-    private static void WriteToFile()
+    private static string ReadFile(string fileLastEntry)
+    {
+      string result = string.Empty;
+      try
+      {
+        using (StreamReader sr = new StreamReader(fileLastEntry))
+        {
+          while (sr.Read() != -1)
+          {
+            result = sr.ReadLine();
+          }
+        }
+      }
+      catch (Exception)
+      {
+        // do nothing
+      }
+
+      return result;
+    }
+
+    private static void WriteToFile(string message, bool append, string filename)
     {
       try
       {
-        using (StreamWriter sw = new StreamWriter("alive.txt", true))
+        using (StreamWriter sw = new StreamWriter(filename, append))
         {
-          sw.WriteLine($"{Environment.MachineName} is alive at {DateTime.Now}");
+          sw.WriteLine(message);
         }
       }
       catch (Exception)
       {
       }
+
     }
   }
 }
