@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Threading;
 
-namespace Aliveness
+namespace TestAliveness
 {
   internal class Program
   {
@@ -68,7 +68,6 @@ namespace Aliveness
       catch (Exception)
       {
       }
-
     }
   }
 }
