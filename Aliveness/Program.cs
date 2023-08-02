@@ -42,9 +42,10 @@ namespace TestAliveness
       {
         using (StreamReader sr = new StreamReader(fileLastEntry))
         {
-          while (sr.Read() != -1)
+          string line;
+          while ((line = sr.ReadLine()) != null)
           {
-            result = sr.ReadLine();
+            result = line;
           }
         }
       }
