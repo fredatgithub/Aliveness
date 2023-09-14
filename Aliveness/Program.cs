@@ -11,7 +11,7 @@ namespace TestAliveness
       Action<string> Display = Console.WriteLine;
       Display("testing aliveness of the VM");
       var timeToSleep = 60000; // test 1000 and prod 60000
-      var fileHistory = "alive.txt";
+      var fileHistory = $"aliveness-{Environment.MachineName}.txt";
       var fileLastEntry = "lastEntry.txt";
       if (!File.Exists(fileHistory))
       {
